@@ -13,6 +13,7 @@ class App extends React.Component {
     // Initialise empty messages array in state to keep local state in sync with Firebase
     // When Firebase changes, update local state, which will update local UI
     this.state = {
+      userInput:'',
       messages: [],
     };
   }
@@ -24,33 +25,52 @@ class App extends React.Component {
       // Add the subsequent child to local component state, initialising a new array to trigger re-render
       this.setState((state) => ({
         // Store message key so we can use it as a key in our list items when rendering messages
-        messages: [...state.messages, { key: data.key, val: data.val() }],
+        messages: [...state.messages, { key: data.key, val: data.val()}],
       }));
     });
   }
 
   // Note use of array fields syntax to avoid having to manually bind this method to the class
-  writeData = () => {
+  writeData = (e) => {
+    e.preventDefault();
+    
     const messageListRef = ref(database, DB_MESSAGES_KEY);
     const newMessageRef = push(messageListRef);
-    set(newMessageRef, "abc");
+    let currDate = new Date();
+    set(newMessageRef, {
+      val: this.state.userInput,
+      dateTime: currDate.toLocaleDateString() + " " + currDate.toLocaleTimeString(),
+    });
+    this.setState({
+      userInput: '',
+    })
   };
 
+  handleInput=(e)=> {
+    this.setState({
+      userInput: e.target.value
+    })
+  }
+
   render() {
+    console.log(this.state.messages)
     // Convert messages in state to message JSX elements to render
     let messageListItems = this.state.messages.map((message) => (
-      <li key={message.key}>{message.val}</li>
+      <li key={message.key}>{message.val.val} - {message.val.dateTime}</li>
     ));
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            Enter your message to be stored in the database!
           </p>
           {/* TODO: Add input field and add text input as messages in Firebase */}
-          <button onClick={this.writeData}>Send</button>
-          <ol>{messageListItems}</ol>
+          <form onSubmit={this.writeData}>
+            <input type='input' value={this.state.userInput} onChange={this.handleInput}/>
+            <input type='submit' value='Submit'/>
+            <ol>{messageListItems}</ol>
+          </form>
         </header>
       </div>
     );
