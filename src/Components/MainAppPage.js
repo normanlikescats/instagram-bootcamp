@@ -2,8 +2,7 @@ import React from "react";
 import { onChildAdded, push, ref, set } from "firebase/database";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { signOut } from "firebase/auth" 
-import { storage, database, auth } from "./firebase";
-import "./App.css";
+import { storage, database, auth } from "../firebase";
 
 // Save the Firebase message folder name as a constant to avoid bugs due to misspelling
 const DB_MESSAGES_KEY = "messages";

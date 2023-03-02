@@ -1,6 +1,7 @@
 import React from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from './firebase';
+import { auth } from '../firebase';
+import "./LoginPage.css"
 
 export default class LoginPage extends React.Component{
   constructor(props){
@@ -98,14 +99,14 @@ export default class LoginPage extends React.Component{
         <p>hi plz login or signup</p>
         <button onClick = {this.registerMode}>Register</button><button onClick={this.signInMode}>Sign In</button>
         { this.state.mode === 'register' ?
-        <form onSubmit={this.handleRegister}>
+        <form onSubmit={this.handleRegister} className="register-box">
           <p>Email: </p><input name= 'email' type='text' value = {this.state.email} onChange={this.handleInput}/>
-          <p>Password: </p><input name = 'password' type='password' value = {this.state.password} onChange={this.handleInput}/><br/>
+          <p>Password: </p><input name = 'password' type='password' value = {this.state.password} onChange={this.handleInput}/>
           <input type='submit' value = 'Register!'/>
         </form> :
-        <form onSubmit = {this.handleSignIn}>
+        <form onSubmit = {this.handleSignIn} className = "signin-box">
           <p>Email: </p><input name= 'email' type='text' value = {this.state.email} onChange={this.handleInput}/>
-          <p>Password: </p><input name = 'password' type='password' value = {this.state.password} onChange={this.handleInput}/><br/>
+          <p>Password: </p><input name = 'password' type='password' value = {this.state.password} onChange={this.handleInput}/>
           <input type='submit' value = 'Sign In!'/>
         </form>}
       </div>

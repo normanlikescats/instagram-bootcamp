@@ -1,8 +1,7 @@
 import React from "react";
 import { onChildAdded, push, ref, set } from "firebase/database";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage, database } from "./firebase";
-import logo from "./logo.png";
+import { storage, database } from "../firebase";
 import "./App.css";
 import MainAppPage from "./MainAppPage";
 import LoginPage from "./LoginPage";

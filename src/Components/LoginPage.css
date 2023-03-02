@@ -1,0 +1,17 @@
+.register-box{
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #20095b;
+  border-radius: 8px;
+  padding: 4vh;
+  margin: 2vh;
+}
+
+.signin-box{
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #6d0808;
+  border-radius: 8px;
+  padding: 4vh;
+  margin: 2vh;
+}
