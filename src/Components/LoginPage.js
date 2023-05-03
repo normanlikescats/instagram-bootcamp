@@ -11,6 +11,7 @@ export default function LoginPage (props){
   const [password, setPassword] = useState('');
   const [mode, setMode] = useState('register');
   const [user, setUser] = useState(null)
+  console.log(user)
 
 
   function handleInput(e){

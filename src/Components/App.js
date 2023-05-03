@@ -1,15 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import { onChildAdded, push, ref, set } from "firebase/database";
-import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage, database } from "../firebase";
-import { createRoot } from "react-dom/client";
 import {
   BrowserRouter,
-  RouterProvider,
   Route,
   Routes,
-  Link,
 } from "react-router-dom";
 import "./App.css";
 import ErrorPage from "./ErrorPage";

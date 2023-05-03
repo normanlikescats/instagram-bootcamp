@@ -17,6 +17,7 @@ export default function MainAppPage (props){
   const [fileInputValue, setFileInputValue] = useState('');
   const [fileUpload, setFileUpload] = useState(null);
   const [reloader, setReloader] = useState(0);
+  console.log(reloader)
   
   useEffect(()=> {
     const messagesRef = ref(database, DB_MESSAGES_KEY);
@@ -26,7 +27,7 @@ export default function MainAppPage (props){
       console.log(messages)
       setMessages((prev)=> [...prev, {key: data.key, val: data.val()}])
     })
-  },[])
+  })
 
 
 
