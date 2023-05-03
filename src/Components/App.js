@@ -1,37 +1,48 @@
 import React from "react";
+import { useState } from "react";
 import { onChildAdded, push, ref, set } from "firebase/database";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage, database } from "../firebase";
+import { createRoot } from "react-dom/client";
+import {
+  BrowserRouter,
+  RouterProvider,
+  Route,
+  Routes,
+  Link,
+} from "react-router-dom";
 import "./App.css";
+import ErrorPage from "./ErrorPage";
 import MainAppPage from "./MainAppPage";
 import LoginPage from "./LoginPage";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state={
-      userAuth: false,
-      email: '',
-    };
-  }
+function App (){
+  const [userAuth, setUserAuth] = useState(false);
+  const [email, setEmail ] = useState(''); 
 
-  handleAuth =(email)=>{
-    this.setState({
-      userAuth: !this.state.userAuth,
-      email: email
-    })
+  function handleAuth(email){
+    setEmail(email);
+    setUserAuth(!userAuth);
   }
-
-  render() {
-    return (
+  
+  return (
       <div className="App">
         <header className="App-header">
-          {this.state.userAuth
-          ? <MainAppPage email = {this.state.email} changeAuth = {this.handleAuth}/>
-          : <LoginPage changeAuth = {this.handleAuth}/>}
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element= {<LoginPage changeAuth = {handleAuth}/>}/>
+              <Route path="/login" element= {<LoginPage changeAuth = {handleAuth}/>}/>
+              <Route path="/feed" element= {<MainAppPage email = {email} changeAuth = {handleAuth}/>}/>
+              <Route path="*" element= {<ErrorPage/>}/>
+            </Routes>            
+          </BrowserRouter>
         </header>
       </div>
     );
-  }
 }
 export default App;
+
+
+          /*{ userAuth
+          ? <MainAppPage email = {email} changeAuth = {handleAuth}/>
+          : <LoginPage changeAuth = {handleAuth}/>}*/

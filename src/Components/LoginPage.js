@@ -1,41 +1,43 @@
 import React from 'react';
+import { useState } from 'react';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebase';
 import "./LoginPage.css"
+import { useNavigate } from 'react-router-dom';
 
-export default class LoginPage extends React.Component{
-  constructor(props){
-    super(props)
+export default function LoginPage (props){
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [mode, setMode] = useState('register');
+  const [user, setUser] = useState(null)
 
-    this.state={
-      email:'',
-      password:'',
-      mode: 'register',
-      user:null
+
+  function handleInput(e){
+    if (e.target.name === 'email'){
+      setEmail(e.target.value)
+    } else if (e.target.name === 'password'){
+      setPassword(e.target.value)
     }
   }
 
-  handleInput=(e)=>{
-    this.setState({
-      [e.target.name]: e.target.value
-    })
-  }
-
-  handleRegister=(e)=>{
+  function handleRegister(e){
     e.preventDefault();
     
-    if (this.state.email === '' || this.state.password === ''){
+    if (email === '' || password === ''){
       alert('Please enter an email and passowrd')
-    } else if(this.state.email.indexOf('@')===-1 || this.state.email.indexOf('@') === this.state.email.length-1){
+    } else if(email.indexOf('@')===-1 || email.indexOf('@') === email.length-1){
       alert('Please use a valid email format')
     } else {
-      createUserWithEmailAndPassword(auth, this.state.email, this.state.password)
+      createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
       // Signed in
       console.log('success')
       console.log(userCredential)
       const user = userCredential.user;
-      this.props.changeAuth(this.state.email)
+      setUser(user);
+      props.changeAuth(email);
+      navigate('/feed')
       // ...
     })
     .catch((error) => {
@@ -45,19 +47,21 @@ export default class LoginPage extends React.Component{
   }
 }
 
-  handleSignIn=(e)=>{
+  function handleSignIn(e){
     e.preventDefault();
 
-    if (this.state.email === '' || this.state.password === ''){
+    if (email === '' || password === ''){
       alert('Please enter an email and passowrd')
     } else{
-    signInWithEmailAndPassword(auth, this.state.email, this.state.password)
+    signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
       console.log('signed in!')
       console.log(userCredential)
       const user = userCredential.user;
-      this.props.changeAuth(this.state.email)
+      setUser(user);
+      props.changeAuth(email);
+      navigate('/feed')
     })
     .catch((error) => {
       const errorMessage = error.message;
@@ -74,42 +78,34 @@ export default class LoginPage extends React.Component{
   }
 }
 
-  registerMode=()=>{
-    this.setState({
-      mode: 'register',
-      email:'',
-      password: ''
-    })
+  function registerMode(){
+    setEmail('');
+    setPassword('');
+    setMode('register')
   }
 
-  signInMode=()=>{
-    this.setState({
-      mode: 'signIn',
-      email:'',
-      password: ''
-    })
+  function signInMode(){
+    setEmail('');
+    setPassword('');
+    setMode('signin')
   }
 
-
-  render(){
-    console.log(`email is ${this.state.email} and password is ${this.state.password}`)
-    console.log(this.state.mode)
-    return(
+  console.log(`email: ${email} and password: ${password}`)
+  return(
       <div>
         <p>hi plz login or signup</p>
-        <button onClick = {this.registerMode}>Register</button><button onClick={this.signInMode}>Sign In</button>
-        { this.state.mode === 'register' ?
-        <form onSubmit={this.handleRegister} className="register-box">
-          <p>Email: </p><input name= 'email' type='text' value = {this.state.email} onChange={this.handleInput}/>
-          <p>Password: </p><input name = 'password' type='password' value = {this.state.password} onChange={this.handleInput}/>
+        <button onClick = {registerMode}>Register</button><button onClick={signInMode}>Sign In</button>
+        { mode === 'register' ?
+        <form onSubmit={handleRegister} className="register-box">
+          <p>Email: </p><input name= 'email' type='text' value = {email} onChange={handleInput}/>
+          <p>Password: </p><input name = 'password' type='password' value = {password} onChange={handleInput}/>
           <input type='submit' value = 'Register!'/>
         </form> :
-        <form onSubmit = {this.handleSignIn} className = "signin-box">
-          <p>Email: </p><input name= 'email' type='text' value = {this.state.email} onChange={this.handleInput}/>
-          <p>Password: </p><input name = 'password' type='password' value = {this.state.password} onChange={this.handleInput}/>
+        <form onSubmit = {handleSignIn} className = "signin-box">
+          <p>Email: </p><input name= 'email' type='text' value = {email} onChange={handleInput}/>
+          <p>Password: </p><input name = 'password' type='password' value = {password} onChange={handleInput}/>
           <input type='submit' value = 'Sign In!'/>
         </form>}
       </div>
-    )
-  }
+  )
 }
